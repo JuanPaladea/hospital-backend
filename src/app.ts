@@ -8,9 +8,9 @@ import apiStudiesRouter from "./routes/apiStudies.router";
 import apiBillsRouter from "./routes/apiBills.router";
 import apiSessionRouter from "./routes/apiSession.router";
 import authToken from "./middlewares/authToken";
+import { PORT } from "./config/env";
 
 const app = express();
-const PORT = 3000;
 
 app.use(cors({
   credentials: true,
