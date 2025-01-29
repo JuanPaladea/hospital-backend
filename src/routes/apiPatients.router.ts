@@ -4,10 +4,10 @@ import { createPatient, deletePatient, getPatientById, getPatientDetails, getPat
 const router = Router();
 
 router.get("/", getPatients);
-router.get("/:id", getPatientById);
-router.get("/:id/details", getPatientDetails);
 router.post('/', createPatient);
+router.get("/:id", getPatientById);
 router.put('/:id', updatePatient);
 router.delete('/:id', deletePatient);
+router.get("/:id/details", getPatientDetails);
 
 export default router;

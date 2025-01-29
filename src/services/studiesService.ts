@@ -32,7 +32,7 @@ class StudiesService {
 
   async getStudiesByPatientDni(dni: string) {
     try {
-      const studies = await pool.query("SELECT * FROM studies WHERE patient_dni = $1", [dni]);
+      const studies = await pool.query("SELECT * FROM studies WHERE patient_id = (SELECT id FROM patients WHERE dni = $1)", [dni]);
       return studies.rows;
     } catch (error) {
       throw error

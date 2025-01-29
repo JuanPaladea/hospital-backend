@@ -10,20 +10,24 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     res.status(400).send({status: 'error', message: 'Invalid email'});
+    return
   }
 
   if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
     res.status(400).send({status: 'error', message: 'Password must contain at least 8 characters, one letter and one number'});
+    return
   }
 
   try {
     const user = await SessionService.getUserByEmail(email);
     if (user) {
       res.status(400).send({status: 'error', message: 'User already exists'});
+      return
     }
   } catch (error) {
     console.error(error);
     res.status(500).send({ status: "error", message: (error as any).message });
+    return
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -38,9 +42,11 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
     });
 
     res.status(201).send({status: 'success', message: 'User created successfully'});
+    return
   } catch (error) {
     console.error(error);
     res.status(500).send({ status: "error", message: (error as any).message });
+    return
   }
 }
 
@@ -49,17 +55,20 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     res.status(400).send({status: 'error', message: 'Invalid email'});
+    return
   }
 
   try {
     const user = await SessionService.getUserByEmail(email);
     if (!user) {
       res.status(400).send({status: 'error', message: 'User not found'});
+      return
     }
     
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       res.status(400).send({status: 'error', message: 'Invalid password'});
+      return
     }
 
     const token = jwt.sign({id: user.user_id}, JWT_SECRET, {expiresIn: '1h'});
@@ -70,9 +79,11 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.status(200).send({status: 'success', message: 'User logged in successfully'});
+    return
   } catch (error) {
     console.error(error);
     res.status(500).send({ status: "error", message: (error as any).message });
+    return
   }
 }
 
@@ -83,15 +94,19 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
     const result = await SessionService.deleteUser(userId);
     if (result.rowCount === 0) {
       res.status(404).send({status: 'error', message: 'User not found'});
+      return
     }
     res.status(200).send({status: 'success', message: 'User deleted successfully'});
+    return
   } catch (error) {
     console.error(error);
     res.status(500).send({ status: "error", message: (error as any).message });
+    return
   }
 } 
 
 export const logOut = async (req: Request, res: Response) => {
   res.clearCookie('token');
   res.status(200).send({status: 'success', message: 'User logged out successfully'});
+  return
 }

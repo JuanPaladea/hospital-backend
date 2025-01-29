@@ -1,0 +1,211 @@
+openapi: 3.0.0
+info:
+  title: Hospital Backend
+  version: 1.0.0
+  description: This is a sample server for hospital studies backend.
+
+tags:
+  - name: studies
+    description: Operations about studies
+
+paths:
+  /api/studies:
+    get:
+      tags:
+        - studies
+      summary: Get all studies
+      operationId: getStudies
+      responses:
+        '200':
+          description: A list of studies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Study'
+    post:
+      tags:
+        - studies
+      summary: Add a new study
+      operationId: addStudy
+      requestBody:
+        description: Study object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type: 
+                  type: string
+                  required: false
+                patient_id:
+                  type: integer
+                  required: true
+                date:
+                  type: string
+                  format: date
+                  required: true
+                status: 
+                  type: string
+                  required: true
+                  enum: [pending, completed]
+      responses:
+        '200':
+          description: Study added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Study'
+  /api/studies/{studyId}:
+    get:
+      tags:
+        - studies
+      summary: Get a study by ID
+      operationId: getStudyById
+      parameters:
+        - name: studyId
+          in: path
+          description: ID of study to return
+          required: true
+          schema:
+            type: integer
+          style: simple
+      responses:
+        '200':
+          description: A study
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Study'
+    put:
+      tags:
+        - studies
+      summary: Update a study
+      operationId: updateStudy
+      parameters:
+        - name: studyId
+          in: path
+          description: ID of study to update
+          required: true
+          schema:
+            type: integer
+          style: simple
+      requestBody:
+        description: Study object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type: 
+                  type: string
+                  required: false
+                patient_id:
+                  type: integer
+                  required: true
+                date:
+                  type: string
+                  format: date
+                  required: true
+                status: 
+                  type: string
+                  required: true
+                  enum: [pending, completed]
+      responses:
+        '200':
+          description: Study updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Study'
+    delete:
+      tags:
+        - studies
+      summary: Delete a study
+      operationId: deleteStudy
+      parameters:
+        - name: studyId
+          in: path
+          description: ID of study to delete
+          required: true
+          schema:
+            type: integer
+          style: simple
+      responses:
+        '200':
+          description: Study deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /api/studies/patient/{patientId}:
+    get:
+      tags:
+        - studies
+      summary: Get all studies of a patient
+      operationId: getStudiesByPatient
+      parameters:
+        - name: patientId
+          in: path
+          description: ID of patient to return studies
+          required: true
+          schema:
+            type: integer
+          style: simple
+      responses:
+        '200':
+          description: A list of studies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Study'
+  /api/studies/patient/dni/{patientDni}:
+    get:
+      tags:
+        - studies
+      summary: Get all studies of a patient by DNI
+      operationId: getStudiesByPatientDni
+      parameters:
+        - name: patientDni
+          in: path
+          description: DNI of patient to return studies
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        '200':
+          description: A list of studies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Study'
+
+components:
+  schemas:
+    Study:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        type:
+          type: string
+        patient_id:
+          type: integer
+        date:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [pending, completed]
