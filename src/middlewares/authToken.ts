@@ -7,14 +7,17 @@ const authToken = (req: Request, res: Response, next: NextFunction): void => {
 
   if (!token) {
     res.status(401).send({ status: 'error', message: 'No token' });
+    return;
   }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.user = decoded as { id: string };
     next();
+    return;
   } catch (error) {
     res.status(403).send({ status: 'error', message: 'Unauthorized' });
+    return;
   }
 }
 

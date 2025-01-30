@@ -34,7 +34,7 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 
   try {
     const user = await SessionService.registeUser(username, email, hashedPassword);
-    const token = jwt.sign({id: user.user_id}, JWT_SECRET, {expiresIn: '1h'});
+    const token = jwt.sign({id: user.user_id, username: user.username, email: user.email}, JWT_SECRET, {expiresIn: '1h'});
 
     res.cookie('token', token, {
       httpOnly: true,
@@ -71,7 +71,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       return
     }
 
-    const token = jwt.sign({id: user.user_id}, JWT_SECRET, {expiresIn: '1h'});
+    const token = jwt.sign({id: user.user_id, username: user.username, email: user.email}, JWT_SECRET, {expiresIn: '1h'});
     
     res.cookie('token', token, {
       httpOnly: true,

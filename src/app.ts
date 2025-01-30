@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 
-import { PORT } from "./config/env";
+import { FRONTEND_URL, PORT } from "./config/env";
 import { swaggerOptions } from "./utils/swagger";
 import authToken from "./middlewares/authToken";
 
@@ -17,16 +17,17 @@ import apiSessionRouter from "./routes/apiSession.router";
 const app = express();
 const swaggerSpec = swaggerJSDoc(swaggerOptions)
 
-app.use(cors({
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-app.use('/', (req, res) => {
-  res.redirect('/docs')
-})
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use("/api/patients", authToken, apiPatientsRouter);
