@@ -1,7 +1,7 @@
 import { pool } from "../db";
 
 class SessionService {
-  async registeUser(username: string, email: string, password: string) {
+  async registerUser(username: string, email: string, password: string) {
     try {
       const result = await pool.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *', [username, email, password]);
       return result.rows[0];
