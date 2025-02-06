@@ -9,6 +9,28 @@ tags:
     description: Operations about users
 
 paths:
+  /api/session/me:
+    get:
+      tags:
+        - users
+      summary: Get user information
+      operationId: getUser
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: integer
+                  username:
+                    type: string
+                  email:
+                    type: string
   /api/session/register:
     post:
       tags:

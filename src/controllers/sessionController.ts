@@ -7,7 +7,7 @@ import { JWT_SECRET } from '../config/env';
 
 const createAndSetToken = (user: any, res: Response): void => {
   const token = jwt.sign(
-    { id: user.user_id, username: user.username, email: user.email },
+    { id: user.user_id, username: user.username, email: user.email, role: user.role },
     JWT_SECRET,
     { expiresIn: '1h' }
   );
@@ -30,6 +30,7 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
       id: number;
       username: string;
       email: string;
+      role: string;
     };
     // Optionally, you can fetch fresh user data from the DB using decoded.id
     res.status(200).json({ status: 'success', user: decoded });
