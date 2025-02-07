@@ -4,9 +4,9 @@ import { Request, Response } from "express";
 export const getPatients = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string || "1");
   const size = parseInt(req.query.size as string || "10");
-
+  const search = req.query.search as string || "";
   try {
-    const patients = await patientsService.getPatients(page, size);
+    const patients = await patientsService.getPatients(page, size, search);
     res.status(200).send({ status: "success", data: patients });
     return
   } catch (error) {

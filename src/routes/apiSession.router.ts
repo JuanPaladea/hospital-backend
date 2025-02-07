@@ -7,7 +7,7 @@ const router = Router();
 router.get("/me", getMe);
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.delete("/logout", logOut);
+router.post("/logout", logOut);
 router.delete("/:userId", deleteUser);
 
 export default router;

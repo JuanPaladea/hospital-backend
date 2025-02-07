@@ -1,11 +1,11 @@
 import { pool } from "../db";
 
 class PatientsService {
-  async getPatients(page: number, size: number) {
+  async getPatients(page: number, size: number, search: string) {
     try {
       const offset = (page - 1) * size;
-
-      const patients = await pool.query("SELECT * FROM patients LIMIT $1 OFFSET $2", [size, offset]);
+      const searchTerm = search.trim() === "" ? "%" : `%${search}%`;
+      const patients = await pool.query("SELECT * FROM patients WHERE name ILIKE $1 ORDER BY id ASC LIMIT $2 OFFSET $3", [searchTerm, size, offset]);
       return patients.rows;
     } catch (error) {
       throw error
