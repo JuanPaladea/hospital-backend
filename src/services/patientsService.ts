@@ -6,7 +6,11 @@ class PatientsService {
       const offset = (page - 1) * size;
       const searchTerm = search.trim() === "" ? "%" : `%${search}%`;
       const patients = await pool.query("SELECT * FROM patients WHERE name ILIKE $1 ORDER BY id ASC LIMIT $2 OFFSET $3", [searchTerm, size, offset]);
-      return patients.rows;
+      const count = await pool.query("SELECT COUNT(*) FROM patients WHERE name ILIKE $1", [searchTerm]);
+      return {
+        data: patients.rows,
+        totalPages: Math.ceil(parseInt(count.rows[0].count) / size),
+      };
     } catch (error) {
       throw error
     }

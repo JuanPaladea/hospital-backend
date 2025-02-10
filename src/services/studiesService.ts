@@ -6,7 +6,11 @@ class StudiesService {
       const offset = (page - 1) * size;
 
       const studies = await pool.query("SELECT * FROM studies LIMIT $1 OFFSET $2", [size, offset]);
-      return studies.rows;
+      const count = await pool.query("SELECT COUNT(*) FROM studies");
+      return {
+        data: studies.rows,
+        totalPages: Math.ceil(parseInt(count.rows[0].count) / size),
+      }
     } catch (error) {
       throw error
     }

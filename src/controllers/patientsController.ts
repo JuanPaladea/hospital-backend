@@ -7,7 +7,7 @@ export const getPatients = async (req: Request, res: Response) => {
   const search = req.query.search as string || "";
   try {
     const patients = await patientsService.getPatients(page, size, search);
-    res.status(200).send({ status: "success", data: patients });
+    res.status(200).send({ status: "success", data: patients.data, totalPages: patients.totalPages });
     return
   } catch (error) {
     res.status(500).send({ status: "error", message: (error as any).message });

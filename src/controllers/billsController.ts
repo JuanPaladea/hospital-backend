@@ -8,7 +8,7 @@ export const getBills = async (req: Request, res: Response) => {
 
   try {
     const bills = await BillsService.getBills(page, size);
-    res.status(200).send({ status: "success", data: bills });
+    res.status(200).send({ status: "success", data: bills.data, totalPages: bills.totalPages });
     return
   } catch (error) {
     res.status(500).send({ status: "error", message: (error as any).message });

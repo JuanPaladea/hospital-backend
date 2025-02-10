@@ -6,7 +6,11 @@ class BillsService {
       const offset = (page - 1) * size;
 
       const bills = await pool.query("SELECT * FROM bills LIMIT $1 OFFSET $2", [size, offset]);
-      return bills.rows;
+      const count = await pool.query("SELECT COUNT(*) FROM bills");
+      return {
+        data: bills.rows,
+        totalPages: Math.ceil(parseInt(count.rows[0].count) / size),
+      };
     } catch (error) {
       throw error
     }
@@ -24,7 +28,7 @@ class BillsService {
   async getBillsByPatientId(patient_id: number) {
     try {
       const bill = await pool.query("SELECT * FROM bills WHERE patient_id = $1", [patient_id]);
-      return bill.rows[0];
+      return bill.rows;
     } catch (error) {
       throw error
     }
@@ -33,7 +37,7 @@ class BillsService {
   async getBillsByPatientDni(dni: string) {
     try {
       const bill = await pool.query("SELECT * FROM bills WHERE patient_dni = $1", [dni]);
-      return bill.rows[0];
+      return bill.rows;
     } catch (error) {
       throw error
     }
