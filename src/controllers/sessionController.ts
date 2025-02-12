@@ -41,7 +41,7 @@ export const getMe = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
-  const { username, email, password } = req.body;
+  const { username, email, password, password2 } = req.body;
 
   // Validate email format
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -55,6 +55,11 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
       status: 'error',
       message: 'Password must contain at least 8 characters, one letter, and one number',
     });
+    return;
+  }
+
+  if (password !== password2) {
+    res.status(400).json({ status: 'error', message: 'Passwords do not match' });
     return;
   }
 
