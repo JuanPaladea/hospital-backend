@@ -1,4 +1,4 @@
-import path from 'path';
+import path from "path";
 
 export const swaggerOptions = {
   definition: {
@@ -11,9 +11,9 @@ export const swaggerOptions = {
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
         },
       },
     },
@@ -23,5 +23,5 @@ export const swaggerOptions = {
       },
     ],
   },
-  apis: [path.join(__dirname, '../../docs/*.yaml')],
+  apis: [path.join(__dirname, "../../docs/*.yaml")],
 };

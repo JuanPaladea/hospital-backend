@@ -1,6 +1,12 @@
 import { Router } from "express";
 
-import { registerUser, loginUser, deleteUser, logOut, getMe } from "../controllers/sessionController";
+import {
+  registerUser,
+  loginUser,
+  deleteUser,
+  logOut,
+  getMe,
+} from "../controllers/sessionController";
 
 const router = Router();
 
